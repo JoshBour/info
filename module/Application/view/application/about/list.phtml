@@ -1,0 +1,81 @@
+<div id="optionPanel">
+    <span class="addAboutCategoryToggle">+ <?php echo $this->translate("Add About Category"); ?></span>
+    <span id="saveChanges"><?php echo $this->translate("Save"); ?></span>
+</div>
+<div id="addAboutCategory" class="formWrapper">
+    <?php
+    $form->prepare();
+    /**
+     * @var \Zend\Form\Fieldset $fieldset
+     */
+    $fieldset = $form->get('aboutCategory');
+    $form->setAttribute('action', $this->url('about/add'));
+    echo $this->form()->openTag($form);
+//    echo $this->formHidden($form->get('security'));
+    ?>
+    <table>
+        <thead>
+        <tr>
+            <th><?php echo $this->translate("Title"); ?>*</th>
+            <th><?php echo $this->translate("Content"); ?>*</th>
+            <th><?php echo $this->translate("Add"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('title'));
+                echo $this->formElementErrors($fieldset->get('title'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formTextarea($fieldset->get('content'));
+                echo $this->formElementErrors($fieldset->get('content'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php echo $this->formSubmit($form->get('submit')->setValue($this->translate('Add'))); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <?php echo $this->form()->closeTag() ?>
+</div>
+<div class="tableWrapper">
+    <table id="about" class="editableTable target-aboutCategory">
+        <?php
+        for ($i = 0; $i < 3; $i++)
+            echo '<colgroup></colgroup>';
+        ?>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th><?php echo $this->translate("Title"); ?></th>
+            <th><?php echo $this->translate("Content"); ?></th>
+            <th><?php echo $this->translate("Delete"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        /**
+         * @var \Application\Entity\AboutCategory $aboutCategory
+         */
+        foreach ($this->aboutCategories as $aboutCategory):
+            $content = $aboutCategory->getContent();
+            ?>
+            <tr>
+                <td class="aboutCategoryAboutCategoryId"><?php echo $aboutCategory->getAboutCategoryId(); ?></td>
+                <td class="aboutCategoryTitle editText required"><?php echo $aboutCategory->getTitle(); ?></td>
+                <td class="aboutCategoryContent editTextfield"><textarea class="invisible"><?php echo $content ? $content : " - "; ?></textarea></td>
+                <td class="delete unEditable">X</td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div id="editPanel">
+    <textarea class="editInput"></textarea>
+    <span id="editDone"><?php echo $this->translate("Done"); ?></span>
+</div>

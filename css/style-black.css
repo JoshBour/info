@@ -1,0 +1,33 @@
+body{
+    color:#ccc;
+    background: #100d10 url(../images/background.png);
+}
+
+header{
+    border-bottom: 8px solid #222;
+    background:none;
+}
+
+a{
+    color:white;
+}
+
+h1{
+    color:white;
+}
+
+.product:hover{
+    border-color:transparent;
+}
+
+#categories .product{
+    margin-right: 10px;
+}
+
+#posts li{
+    margin-bottom:30px;
+}
+
+#posts .lastInlineItem{
+    margin-right:0;
+}

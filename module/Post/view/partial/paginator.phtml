@@ -1,0 +1,24 @@
+<?php if ($this->pageCount): ?>
+    <div class="pagination pagination-centered">
+        <!-- Previous page link -->
+        <?php if (isset($this->previous)): ?>
+            <a href="<?php echo $this->url($this->route); ?>/<?php echo $this->previous; ?>">
+                <<&nbsp;Newer
+            </a>
+        <?php else: ?>
+            <a href="#" class="disabled">
+                <<&nbsp;Newer
+            </a>
+        <?php endif; ?>
+        <!-- Next page link -->
+        <?php if (isset($this->next)): ?>
+            <a class="rFloat" href="<?php echo $this->url($this->route); ?>/<?php echo $this->next; ?>">
+                Older&nbsp;>>
+            </a>
+        <?php else: ?>
+            <a href="#" class="rFloat disabled">
+                Older&nbsp;>>
+            </a>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

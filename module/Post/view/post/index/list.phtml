@@ -1,0 +1,93 @@
+<div id="optionPanel">
+    <span class="addPostToggle">+ <?php echo $this->translate("Add Post"); ?></span>
+    <span id="saveChanges"><?php echo $this->translate("Save"); ?></span>
+</div>
+<div id="addPost" class="formWrapper">
+    <?php
+    $form->prepare();
+    /**
+     * @var \Zend\Form\Fieldset $fieldset
+     */
+    $fieldset = $form->get('post');
+    $form->setAttribute('action', $this->url('posts/add'));
+    echo $this->form()->openTag($form);
+//    echo $this->formHidden($form->get('security'));
+    ?>
+    <table>
+        <thead>
+        <tr>
+            <th><?php echo $this->translate("Title"); ?>*</th>
+            <th><?php echo $this->translate("Content"); ?>*</th>
+            <th><?php echo $this->translate("Thumbnail"); ?>*</th>
+            <th><?php echo $this->translate("Add"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('title'));
+                echo $this->formElementErrors($fieldset->get('title'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formTextarea($fieldset->get('content'));
+                echo $this->formElementErrors($fieldset->get('content'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formFile($fieldset->get('thumbnail'));
+                echo $this->formElementErrors($fieldset->get('thumbnail'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php echo $this->formSubmit($form->get('submit')->setValue($this->translate('Add'))); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <?php echo $this->form()->closeTag() ?>
+</div>
+<div class="tableWrapper">
+    <table id="posts" class="editableTable target-post">
+        <?php
+        for ($i = 0; $i < 4; $i++)
+            echo '<colgroup></colgroup>';
+        ?>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th><?php echo $this->translate("Title"); ?></th>
+            <th><?php echo $this->translate("Content"); ?></th>
+            <th><?php echo $this->translate("Thumbnail"); ?></th>
+            <th><?php echo $this->translate("Delete"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        /**
+         * @var \Post\Entity\Post $post
+         */
+        foreach ($this->posts as $post):
+            $thumbnail = $post->getThumbnail();
+            ?>
+            <tr>
+                <td class="postPostId"><?php echo $post->getPostId(); ?></td>
+                <td class="postTitle editText required"><?php echo $post->getTitle(); ?></td>
+                <td class="postContent editTextfield required"><textarea class="invisible"><?php echo $post->getContent(); ?></textarea></td>
+                <td class="postThumbnail editImage">
+                    <span class="fileMeta invisible">images/posts/<?php echo uniqid("post_").rand(1000000,9999999); ?>.jpg</span>
+                    <span class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/posts/' . $thumbnail) . '" alt="' . $this->translate("post image") . '" />' : ' - '; ?></span>
+                </td>
+                <td class="delete unEditable">X</td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div id="editPanel">
+    <textarea class="editInput"></textarea>
+    <span id="editDone"><?php echo $this->translate("Done"); ?></span>
+</div>

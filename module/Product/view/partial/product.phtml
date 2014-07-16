@@ -1,0 +1,19 @@
+<?php
+$url = 'products_index/product_uncategorised';
+$parameters = array("productNumber" => $product->getProductNumber());
+if ($this->category) {
+    $url = 'products_index/product_categorised';
+    $parameters["categoryUrl"] = $category->getUrl();
+}
+$mod = empty($this->mod) ? '' : ($this->key + 1) % $this->mod;
+?>
+<li class="product<?php echo $mod && $mod === 0 ? ' "lastInlineItem"' : ""; ?>">
+    <a href="<?php echo $this->url($url, $parameters); ?>"
+       title="<?php echo $product->getName(); ?>">
+        <img
+            src="<?php echo $this->basePath('images/products/' . $product->getThumbnail()); ?>"/>
+        <?php if ($this->includeName): ?>
+            <span class="productName"><?php echo $product->getName(); ?></span>
+        <?php endif; ?>
+    </a>
+</li>

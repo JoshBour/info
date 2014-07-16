@@ -1,0 +1,129 @@
+<?php
+$relatedProducts = $product->getRelatedProducts();
+$variations = $product->getProductVariations();
+$route = $this->routeName();
+$params = array("productNumber" => $product->getProductNumber());
+$datasheet = $product->getDatasheet();
+if ($category)
+    $params["categoryUrl"] = $category->getUrl();
+$price = $product->getPrice();
+?>
+<div id="returnNav">
+    <a href="<?php echo $this->url('products_index'); ?>" class="returnLink">Product Categories</a>
+    <?php if (!empty($category)): ?> > <a
+        href="<?php echo $this->url('products_index/category', array("categoryUrl" => $category->getUrl())); ?>"
+        class="returnLink"><?php echo $category->getName(); ?></a>
+    <?php endif; ?>
+</div>
+<div id="sidebar">
+    <div class="tabs">
+        <a href="<?php $params["tab"] = "description";
+        echo $this->url($route, $params); ?>"<?php echo $tab == "description" ? ' class="activeTab"' : ''; ?>>Description</a>
+        <a href="#" class="printTrigger">Print</a>
+    </div>
+</div>
+<div id="main">
+    <h1><?php echo $product->getName(); ?></h1>
+    <div class="productPhotos">
+        <img class="productThumbnail magnifiable"
+             src="<?php echo $this->basePath('images/products/' . $product->getThumbnail()); ?>"/>
+        <img class="productSpecifications magnifiable"
+             src="<?php echo $this->basePath('images/products/' . $product->getSpecifications()); ?>"/>
+    </div>
+    <div itemscope itemtype="http://schema.org/Product" class="invisible">
+        <span itemprop="name"><?php echo $product->getName(); ?></span>
+        <a itemprop="logo" href="<?php echo $this->basePath('images/products/' . $product->getThumbnail()); ?>">
+            <img itemprop="name" src="<?php echo $this->basePath('images/products/' . $product->getThumbnail()); ?>"/>
+        </a>
+        <a itemprop="url" href="<?php echo $this->url($route, $params); ?>">
+            <span itemprop="name"><?php echo $product->getName(); ?></span>
+        </a>
+
+        <div itemprop="description"><?php echo $product->getDescription(); ?></div>
+        <div itemprop="manufacturer" itemscope itemtype="http://schema.org/Organization">
+            Manufactured by: <span itemprop="name">Info</span>
+        </div>
+        <div>Product ID: <span itemprop="productID"><?php echo $product->getProductNumber(); ?></span></div>
+        <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            <span itemprop="price"><?php echo $price ? $price : "0.00"; ?></span>
+            <meta itemprop="priceCurrency" content="EUR"/>
+            <link itemprop="itemCondition" href="http://schema.org/NewCondition"/>
+            New
+            <link itemprop="availability" href="http://schema.org/InStock"/>
+            In Stock
+        </div>
+    </div>
+    <div id="description">
+        <div class="module heightAdjuster">
+            <?php echo $product->getDescription(); ?>
+        </div>
+    </div>
+    <?php if ($relatedProducts->count() > 0): ?>
+        <div id="relatedProducts">
+            <h2>Related Products</h2>
+            <ul class="module">
+                <?php foreach ($relatedProducts as $relatedProduct)
+                    echo $this->partial('product', array("product" => $relatedProduct, "includeName" => true, "category" => $category));
+                ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+    <table class="productAttributes">
+        <thead>
+        <tr>
+            <th>Product Number</th>
+            <?php
+            $attributes = $product->getAttributes()->toArray();
+            $attributeCount = count($attributes) + 1;
+            usort($attributes, function ($a, $b) {
+                return $a->getPosition() > $b->getPosition();
+            });
+            foreach ($attributes as $attribute) {
+                echo '<th>' . $attribute->getAttribute()->getName() . '</th>';
+            }
+            ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $productVariations = $product->getProductVariations()->toArray();
+        if(count($productVariations) <= 0)
+        array_unshift($productVariations,$product);
+//        $productVariations[] = $product;
+//        uasort($productVariations,function($a, $b){
+//           return $a->getProductNumber() > $b->getProductNumber();
+//        });
+        foreach ($productVariations as $variation):
+            ?>
+            <tr>
+                <td><?php echo $variation->getProductNumber(); ?></td>
+                <?php
+                $attributes = $variation->getAttributes()->toArray();
+                usort($attributes, function ($a, $b) {
+                    return $a->getPosition() > $b->getPosition();
+                });
+                foreach ($attributes as $attribute) {
+                    echo '<td>' . $attribute->getValue() . '</td>';
+                }
+                ?>
+            </tr>
+            <tr class="productMeta">
+                <?php
+                $params["productNumber"] = $variation->getProductNumber();
+                echo '<td><a href="' . $this->url($route, $params) . '"></a></td>';
+                ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php if ($relatedProducts->count() > 0): ?>
+        <div id="relatedProducts">
+            <h2>Related Products</h2>
+            <ul class="module">
+                <?php foreach ($relatedProducts as $relatedProduct)
+                    echo $this->partial('product', array("product" => $relatedProduct, "includeName" => true, "category" => $category));
+                ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+</div>

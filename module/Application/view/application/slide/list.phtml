@@ -1,0 +1,102 @@
+<div id="optionPanel">
+    <span class="addSlideToggle">+ <?php echo $this->translate("Add Slide"); ?></span>
+    <span id="saveChanges"><?php echo $this->translate("Save"); ?></span>
+</div>
+<div id="addSlide" class="formWrapper">
+    <?php
+    $form->prepare();
+    /**
+     * @var \Zend\Form\Fieldset $fieldset
+     */
+    $fieldset = $form->get('slide');
+    $form->setAttribute('action', $this->url('slides/add'));
+    echo $this->form()->openTag($form);
+//    echo $this->formHidden($form->get('security'));
+    ?>
+    <table>
+        <thead>
+        <tr>
+            <th><?php echo $this->translate("Post"); ?>*</th>
+            <th><?php echo $this->translate("Position"); ?>*</th>
+            <th><?php echo $this->translate("Caption"); ?>*</th>
+            <th><?php echo $this->translate("Thumbnail"); ?></th>
+            <th><?php echo $this->translate("Add"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <?php
+                echo $this->formSelect($fieldset->get('post'));
+                echo $this->formElementErrors($fieldset->get('post'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('position'));
+                echo $this->formElementErrors($fieldset->get('position'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('caption'));
+                echo $this->formElementErrors($fieldset->get('caption'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formFile($fieldset->get('thumbnail'));
+                echo $this->formElementErrors($fieldset->get('thumbnail'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php echo $this->formSubmit($form->get('submit')->setValue($this->translate('Add'))); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <?php echo $this->form()->closeTag() ?>
+</div>
+<div class="tableWrapper">
+    <table id="slides" class="editableTable target-slide">
+        <?php
+        for ($i = 0; $i < 5; $i++)
+            echo '<colgroup></colgroup>';
+        ?>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th><?php echo $this->translate("Post"); ?></th>
+            <th><?php echo $this->translate("Position"); ?></th>
+            <th><?php echo $this->translate("Caption"); ?></th>
+            <th><?php echo $this->translate("Thumbnail"); ?></th>
+            <th><?php echo $this->translate("Delete"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        /**
+         * @var \Application\Entity\Slide $slide
+         */
+        foreach ($this->slides as $slide):
+            $thumbnail = $slide->getThumbnail();
+            ?>
+            <tr>
+                <td class="slideSlideId"><?php echo $slide->getSlideId(); ?></td>
+                <td class="slidePost editSelect"><?php echo $slide->getPost()->getTitle(); ?></td>
+                <td class="slidePosition editText required"><?php echo $slide->getPosition(); ?></td>
+                <td class="slideCaption editText required"><?php echo $slide->getCaption(); ?></td>
+                <td class="slideThumbnail editImage">
+                    <span class="fileMeta invisible">images/slides/<?php echo uniqid("slide_").rand(1000000,9999999); ?>.jpg</span>
+                    <span class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/slides/' . $thumbnail) . '" alt="' . $this->translate("slide image") . '" />' : ' - '; ?></span>
+                </td>
+                <td class="delete unEditable">X</td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div id="editPanel">
+    <textarea class="editInput"></textarea>
+    <span id="editDone"><?php echo $this->translate("Done"); ?></span>
+</div>

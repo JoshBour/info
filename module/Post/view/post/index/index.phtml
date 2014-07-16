@@ -1,0 +1,25 @@
+<ul id="posts">
+    <?php foreach ($this->posts as $key => $post): ?>
+        <li<?php echo ($key+1)%3===0 ? ' class="lastInlineItem"' : '';?>>
+            <a href="<?php echo $this->url('post_view', array("postUrl" => $post->getUrl())); ?>">
+                <span class="postThumbnail"><img
+                        src="<?php echo $this->basePath('images/posts/' . $post->getThumbnail()); ?>"/></span>
+                <span class="postTitle"><?php echo $post->getTitle(); ?></span>
+            </a>
+        </li>
+    <?php endforeach; ?>
+    <?php // add at the end of the file after the table
+    echo $this->paginationControl(
+    // the paginator object
+        $this->posts,
+        // the scrolling style; see http://zf2.readthedocs.org/en/release-2.1.4/modules/zend.paginator.usage.html#rendering-pages-with-view-scripts
+        'sliding',
+        // the partial to use to render the control
+        array('paginator', 'Post'),
+        // the route to link to when a user clicks a control link
+        array(
+            'route' => 'posts_index'
+        )
+    );
+    ?>
+</ul>

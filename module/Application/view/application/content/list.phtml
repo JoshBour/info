@@ -1,0 +1,37 @@
+<div id="optionPanel">
+    <span id="saveChanges"><?php echo $this->translate("Save"); ?></span>
+</div>
+<div class="tableWrapper">
+    <table id="contents" class="editableTable target-content">
+        <?php
+        for ($i = 0; $i < 3; $i++)
+            echo '<colgroup></colgroup>';
+        ?>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th><?php echo $this->translate("Name"); ?></th>
+            <th><?php echo $this->translate("Content"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        /**
+         * @var \Application\Entity\Content $content
+         */
+        foreach ($this->contents as $content):
+            $contentText = $content->getContent();
+            ?>
+            <tr>
+                <td class="id"><?php echo $content->getContentId(); ?></td>
+                <td class="contentName unEditable"><?php echo $content->getName(); ?></td>
+                <td class="contentContent editTextfield required"><textarea class="invisible"><?php echo $contentText ? $contentText : " - "; ?></textarea></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div id="editPanel">
+    <textarea class="editInput"></textarea>
+    <span id="editDone"><?php echo $this->translate("Done"); ?></span>
+</div>

@@ -1,0 +1,206 @@
+<div id="optionPanel">
+    <span class="addProductToggle">+ <?php echo $this->translate("Add Product"); ?></span>
+    <span id="saveChanges"><?php echo $this->translate("Save"); ?></span>
+</div>
+<div id="addProduct" class="formWrapper">
+    <?php
+    $form->prepare();
+    /**
+     * @var \Zend\Form\Fieldset $fieldset
+     */
+    $fieldset = $form->get('product');
+    $form->setAttribute('action', $this->url('products/add'));
+    echo $this->form()->openTag($form);
+//    echo $this->formHidden($form->get('security'));
+    ?>
+    <table>
+        <thead>
+        <tr>
+            <th><?php echo $this->translate("Product Number"); ?>*</th>
+            <th><?php echo $this->translate("Name"); ?>*</th>
+            <th><?php echo $this->translate("Description"); ?>*</th>
+            <th><?php echo $this->translate("Attributes"); ?>*</th>
+            <th><?php echo $this->translate("Datasheet"); ?></th>
+            <th><?php echo $this->translate("Thumbnail"); ?></th>
+            <th><?php echo $this->translate("Specifications"); ?></th>
+            <th><?php echo $this->translate("Related Products"); ?></th>
+            <th><?php echo $this->translate("Product Variations"); ?></th>
+            <th><?php echo $this->translate("Category"); ?></th>
+            <th><?php echo $this->translate("Add"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('productNumber'));
+                echo $this->formElementErrors($fieldset->get('productNumber'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('name'));
+                echo $this->formElementErrors($fieldset->get('name'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formTextarea($fieldset->get('description'));
+                echo $this->formElementErrors($fieldset->get('description'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <ul class="attributes invisible">
+                </ul>
+                <span class="editAttributes">Click to edit</span>
+            </td>
+            <td>
+                <?php
+                echo $this->formFile($fieldset->get('datasheet'));
+                echo $this->formElementErrors($fieldset->get('datasheet'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formFile($fieldset->get('thumbnail'));
+                echo $this->formElementErrors($fieldset->get('thumbnail'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formFile($fieldset->get('specifications'));
+                echo $this->formElementErrors($fieldset->get('specifications'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formSelect($fieldset->get('relatedProducts'));
+                echo $this->formElementErrors($fieldset->get('relatedProducts'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formSelect($fieldset->get('productVariations'));
+                echo $this->formElementErrors($fieldset->get('productVariations'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formSelect($fieldset->get('category'));
+                echo $this->formElementErrors($fieldset->get('category'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php echo $this->formSubmit($form->get('submit')->setValue($this->translate('Add'))); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <?php echo $this->form()->closeTag() ?>
+</div>
+<div class="tableWrapper">
+    <table id="products" class="editableTable target-product">
+        <?php
+        for ($i = 0; $i < 11; $i++)
+            echo '<colgroup></colgroup>';
+        ?>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th><?php echo $this->translate("Product Number"); ?></th>
+            <th><?php echo $this->translate("Name"); ?></th>
+            <th><?php echo $this->translate("Description"); ?></th>
+            <th><?php echo $this->translate("Attributes"); ?></th>
+            <th><?php echo $this->translate("Datasheet"); ?></th>
+            <th><?php echo $this->translate("Thumbnail"); ?></th>
+            <th><?php echo $this->translate("Specifications"); ?></th>
+            <th><?php echo $this->translate("Related Products"); ?></th>
+            <th><?php echo $this->translate("Product Variations"); ?></th>
+            <th><?php echo $this->translate("Category"); ?></th>
+            <th><?php echo $this->translate("Delete"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        /**
+         * @var \Product\Entity\Product $product
+         */
+        foreach ($this->products as $product):
+            $datasheet = $product->getDatasheet();
+            $thumbnail = $product->getThumbnail();
+            $specifications = $product->getSpecifications();
+            $relatedProducts = $product->getRelatedProducts();
+            $productVariations = $product->getProductVariations();
+            $category = $product->getCategory();
+            ?>
+            <tr>
+                <td class="productProductId"><?php echo $product->getProductId(); ?></td>
+                <td class="productProductNumber editText required"><?php echo $product->getProductNumber(); ?></td>
+                <td class="productName editText notEmpty"><?php echo $product->getName(); ?></td>
+                <td class="productDescription editTextfield required"><textarea class="invisible"><?php echo $product->getDescription(); ?></textarea></td>
+                <td class="productAttributes editList">
+                    <ul class="attributes invisible">
+                        <?php foreach($product->getAttributes() as $joinAttribute):
+                            $attribute = $joinAttribute->getAttribute();
+                            ?>
+                        <li>
+                            <span class="attributeId"><?php echo $attribute->getAttributeId(); ?></span>
+                            <span class="attributeName"><?php echo $attribute->getName(); ?></span>
+                            <span class="attributeValue"><?php echo $joinAttribute->getValue(); ?></span>
+                            <span class="attributePosition"><?php echo $joinAttribute->getPosition(); ?></span>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <span class="editAttributes">Click to edit</span>
+                </td>
+                <td class="productDatasheet editFile">
+                    <span class="fileMeta invisible">data/datasheets/<?php echo uniqid('datasheet_'); ?>.pdf</span>
+                    <span class="fileName"><?php echo $datasheet ? $datasheet : ' - '; ?></span>
+                </td>
+                <td class="productThumbnail editImage">
+                    <span class="fileMeta invisible">images/products/<?php echo uniqid("product_").rand(1000000,9999999); ?>.jpg</span>
+                    <span class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/products/' . $thumbnail) . '" alt="' . $this->translate("product image") . '" />' : ' - '; ?></span>
+                </td>
+                <td class="productSpecifications editImage">
+                    <span class="fileMeta invisible">images/products/<?php echo uniqid("specifications_").rand(1000000,9999999); ?>.jpg</span>
+                    <span class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/products/' . $specifications) . '" alt="' . $this->translate("specifications image") . '" />' : ' - '; ?></span>
+                </td>
+                <td class="productRelatedProducts editMultiSelect excludeCurrent">
+                    <?php
+                    if ($relatedProducts->count() > 0):
+                        foreach ($relatedProducts as $relatedProduct):
+                            ?>
+                            <span
+                                class="option-<?php echo $relatedProduct->getProductId(); ?>"><?php echo $relatedProduct->getProductNumber(); ?></span>
+
+                        <?php
+                        endforeach;
+                    else:
+                        echo ' - ';
+                    endif;?>
+                </td>
+                <td class="productProductVariations editMultiSelect excludeCurrent">
+                    <?php
+                    if ($productVariations->count() > 0):
+                        foreach ($productVariations as $productVariation):
+                            ?>
+                            <span
+                                class="option-<?php echo $productVariation->getProductId(); ?>"><?php echo $productVariation->getProductNumber(); ?></span>
+
+                        <?php
+                        endforeach;
+                    else:
+                        echo ' - ';
+                    endif;?>
+                </td>
+                <td class="productCategory editSelect"><?php echo $category ? $category->getName() : ' - '; ?></td>
+                <td class="delete unEditable">X</td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div id="editPanel">
+    <span class="editInput"></span>
+    <span id="editDone"><?php echo $this->translate("Done"); ?></span>
+</div>

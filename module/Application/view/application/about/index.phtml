@@ -1,0 +1,43 @@
+<div id="sidebar">
+    <ul class="module">
+        <?php foreach ($aboutCategories as $category): ?>
+            <li>
+                <a href="<?php echo $this->url('about_index', array('category' => $category->getUrl())); ?>"<?php echo $this->activeCategory == $category->getUrl() ? ' class="active"' : ""; ?>><?php echo $category->getTitle(); ?></a>
+            </li>
+        <?php endforeach; ?>
+        <li>
+            <a href="<?php echo $this->url('about_index', array('category' => 'partners')); ?>"<?php echo $this->activeCategory == "partners" ? ' class="active"' : ""; ?>>Partners</a>
+        </li>
+    </ul>
+</div>
+<div id="main">
+    <?php
+    if ($this->activeCategory == "partners"):
+        echo "<ul id='partners'>";
+        foreach ($this->aboutCategory as $partner):
+            $name = $partner->getName();
+            $website = $partner->getWebsite();
+            $description = $partner->getDescription();
+            ?>
+            <li class="partner">
+                <div class="partnerMeta">
+                    <div class="title"><?php echo $name; ?></div>
+                    <img class="thumbnail"
+                         src="<?php echo $this->basePath('images/partners/' . $partner->getThumbnail()); ?>"
+                         alt="partner image"/>
+                    <a href="http://<?php echo $website; ?>" target="_blank"
+                       title="<?php echo $name; ?>'s Website"><?php echo $website; ?></a>
+                </div>
+                <?php if (!empty($description)): ?>
+                    <div class="module">
+                        <?php echo $description; ?>
+                    </div>
+                <?php endif; ?>
+            </li>
+        <?php
+        endforeach;
+    else:
+        echo $aboutCategory->getContent();
+    endif;
+    ?>
+</div>

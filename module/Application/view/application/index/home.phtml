@@ -1,0 +1,35 @@
+<div id="slideShow">
+    <div id="slideShowPics">
+        <?php
+        /**
+         * @var \Application\Entity\Slide $slide
+         */
+        foreach ($this->slides as $key => $slide):
+            $post = $slide->getPost();
+            $thumbnail = $slide->getThumbnail() ? '/slides/' . $slide->getThumbnail() : '/posts/' . $post->getThumbnail();
+            ?>
+            <div class="slide<?php echo $key == 0 ? " activeSlide" : ""; ?>">
+                <a href="<?php echo $this->url('post_view', array("postUrl" => $post->getUrl())); ?>">
+                    <img src="<?php echo $this->basePath('images/' . $thumbnail); ?>" alt="slide image"/>
+                </a>
+                <div id="slideCaption"><?php echo $slide->getCaption(); ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <div id="slideCover"></div>
+    <!--    <div id="slideNavigation">-->
+    <span id="slideLeft"></span>
+    <span id="slideRight"></span>
+    <!--    </div>-->
+</div>
+<ul id="posts">
+    <?php foreach ($this->posts as $post): ?>
+        <li>
+            <a href="<?php echo $this->url('post_view', array("postUrl" => $post->getUrl())); ?>">
+                <span class="postThumbnail"><img
+                        src="<?php echo $this->basePath('images/posts/' . $post->getThumbnail()); ?>"/></span>
+                <span class="postTitle"><?php echo $post->getTitle(); ?></span>
+            </a>
+        </li>
+    <?php endforeach; ?>
+</ul>

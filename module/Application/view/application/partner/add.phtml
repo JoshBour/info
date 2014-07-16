@@ -1,0 +1,53 @@
+<?php
+$form->prepare();
+/**
+ * @var \Zend\Form\Fieldset $fieldset
+ */
+$fieldset = $form->get('partner');
+$form->setAttribute('action', $this->url('partners/add'));
+echo $this->form()->openTag($form);
+//echo $this->formHidden($form->get('security'));
+?>
+<table>
+    <thead>
+    <tr>
+        <th><?php echo $this->translate("Name"); ?></th>
+        <th><?php echo $this->translate("Website"); ?></th>
+        <th><?php echo $this->translate("Description"); ?></th>
+        <th><?php echo $this->translate("Thumbnail"); ?>*</th>
+        <th><?php echo $this->translate("Add"); ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <?php
+            echo $this->formInput($fieldset->get('name'));
+            echo $this->formElementErrors($fieldset->get('name'), array('class' => 'formError'));
+            ?>
+        </td>
+        <td>
+            <?php
+            echo $this->formInput($fieldset->get('website'));
+            echo $this->formElementErrors($fieldset->get('website'), array('class' => 'formError'));
+            ?>
+        </td>
+        <td>
+            <?php
+            echo $this->formTextarea($fieldset->get('description'));
+            echo $this->formElementErrors($fieldset->get('description'), array('class' => 'formError'));
+            ?>
+        </td>
+        <td>
+            <?php
+            echo $this->formFile($fieldset->get('thumbnail'));
+            echo $this->formElementErrors($fieldset->get('thumbnail'), array('class' => 'formError'));
+            ?>
+        </td>
+        <td>
+            <?php echo $this->formSubmit($form->get('submit')->setValue($this->translate('Add'))); ?>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<?php echo $this->form()->closeTag() ?>

@@ -1,0 +1,53 @@
+<?php
+$form->prepare();
+/**
+ * @var \Zend\Form\Fieldset $fieldset
+ */
+$fieldset = $form->get('slide');
+$form->setAttribute('action', $this->url('slides/add'));
+echo $this->form()->openTag($form);
+//echo $this->formHidden($form->get('security'));
+?>
+<table>
+    <thead>
+    <tr>
+        <th><?php echo $this->translate("Post"); ?>*</th>
+        <th><?php echo $this->translate("Position"); ?>*</th>
+        <th><?php echo $this->translate("Caption"); ?>*</th>
+        <th><?php echo $this->translate("Thumbnail"); ?></th>
+        <th><?php echo $this->translate("Add"); ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <?php
+            echo $this->formSelect($fieldset->get('post'));
+            echo $this->formElementErrors($fieldset->get('post'), array('class' => 'formError'));
+            ?>
+        </td>
+        <td>
+            <?php
+            echo $this->formInput($fieldset->get('position'));
+            echo $this->formElementErrors($fieldset->get('position'), array('class' => 'formError'));
+            ?>
+        </td>
+        <td>
+            <?php
+            echo $this->formInput($fieldset->get('caption'));
+            echo $this->formElementErrors($fieldset->get('caption'), array('class' => 'formError'));
+            ?>
+        </td>
+        <td>
+            <?php
+            echo $this->formFile($fieldset->get('thumbnail'));
+            echo $this->formElementErrors($fieldset->get('thumbnail'), array('class' => 'formError'));
+            ?>
+        </td>
+        <td>
+            <?php echo $this->formSubmit($form->get('submit')->setValue($this->translate('Add'))); ?>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<?php echo $this->form()->closeTag() ?>

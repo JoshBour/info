@@ -1,0 +1,90 @@
+<div id="optionPanel">
+    <span class="addUserToggle">+ <?php echo $this->translate("Add User"); ?></span>
+    <span id="saveChanges"><?php echo $this->translate("Save"); ?></span>
+</div>
+<div id="addUser" class="formWrapper">
+    <?php
+    /**
+     * @var \Zend\Form\Fieldset $fieldset
+     */
+    $fieldset = $form->get('user');
+    $form->prepare();
+    $form->setAttribute('action', $this->url('users/add'));
+    echo $this->form()->openTag($form);
+//    echo $this->formHidden($form->get('security'));
+    ?>
+    <table>
+        <thead>
+        <tr>
+            <th><?php echo $this->translate("Username"); ?>*</th>
+            <th><?php echo $this->translate("Password"); ?>*</th>
+            <th><?php echo $this->translate("Email"); ?></th>
+            <th><?php echo $this->translate("Add"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('username'));
+                echo $this->formElementErrors($fieldset->get('username'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('password'));
+                echo $this->formElementErrors($fieldset->get('password'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formEmail($fieldset->get('email'));
+                echo $this->formElementErrors($fieldset->get('email'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php echo $this->formSubmit($form->get('submit')->setValue($this->translate('Add'))); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <?php echo $this->form()->closeTag() ?>
+</div>
+<div class="tableWrapper">
+    <table id="users" class="editableTable target-user">
+        <?php
+        for ($i = 0; $i < 4; $i++)
+            echo '<colgroup></colgroup>';
+        ?>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th><?php echo $this->translate("Username"); ?></th>
+            <th><?php echo $this->translate("Password"); ?></th>
+            <th><?php echo $this->translate("Email"); ?></th>
+            <th><?php echo $this->translate("Delete"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        /**
+         * @var \User\Entity\User $user
+         */
+        foreach ($this->users as $user):
+            $email = $user->getEmail();
+            ?>
+            <tr>
+                <td class="userUserId invisible"><?php echo $user->getUserId(); ?></td>
+                <td class="userUsername editText required"><?php echo $user->getUsername(); ?></td>
+                <td class="userPassword editText required">**********</td>
+                <td class="userEmail editText"><?php echo $email ? $user->getEmail() : ' - '; ?></td>
+                <td class="delete unEditable">X</td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div id="editPanel">
+    <textarea></textarea>
+    <span id="editDone"><?php echo $this->translate("Done"); ?></span>
+</div>

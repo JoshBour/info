@@ -1,0 +1,14 @@
+<div id="post">
+    <img class="postThumbnail" src="<?php echo $this->basePath('images/posts/' . $post->getThumbnail()); ?>"
+         alt="post thumbnail"/>
+
+    <div class="postHeader">
+        <span class="postDate"><?php echo $post->getPostDate()->format('n F, Y'); ?></span>
+
+        <h1><?php echo $post->getTitle(); ?></h1>
+    </div>
+
+    <div class="postBody">
+        <?php echo $post->getContent(); ?>
+    </div>
+</div>

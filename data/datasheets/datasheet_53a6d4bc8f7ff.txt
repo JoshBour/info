@@ -1,0 +1,26 @@
+1.	Disconnect from the internet
+2.	Install trial Photoshop from the zip file
+-There should be a file named “Photoshop2”, it’s a zip file, extract it 
+-Click on the new “Photoshop” folder
+-Click “Adobe CS6”
+-Click “Set-up,” it’ll start the download
+-Make sure to start a trial period
+-Click “Try” not “Install”
+3.	Open Photoshop
+-Don’t skip this step!
+-Start the trial
+-Simply open the program and then close it again
+4.	Add the crack
+-This file turns the trial into the full version of the program
+-In the files click “Patch”
+-Click “Crack”
+-Click “x64”
+-You should see a file called “amtlid.dll”, copy it
+-Now, click “My Computer”
+-Click on the hard disk drive
+-Click “Program Files”
+-Click “Adobe”
+-Click “Adobe Photoshop CS6 (64 bit)”
+-Paste the file, click copy and replace. It may say it needs administrative permission, click continue
+5.	You can turn on the internet now
+6.	DONE! Enjoy

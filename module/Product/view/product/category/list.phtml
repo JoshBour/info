@@ -1,0 +1,115 @@
+<div id="optionPanel">
+    <span class="addCategoryToggle">+ <?php echo $this->translate("Add Category"); ?></span>
+    <span id="saveChanges"><?php echo $this->translate("Save"); ?></span>
+    <span id="resetChanges"><?php echo $this->translate("Reset"); ?></span>
+</div>
+<div id="addCategory" class="formWrapper">
+    <?php
+    $form->prepare();
+    /**
+     * @var \Zend\Form\Fieldset $fieldset
+     */
+    $fieldset = $form->get('category');
+    $form->setAttribute('action', $this->url('categories/add'));
+    echo $this->form()->openTag($form);
+//    echo $this->formHidden($form->get('security'));
+    ?>
+    <table>
+        <thead>
+        <tr>
+            <th><?php echo $this->translate("Name"); ?>*</th>
+            <th><?php echo $this->translate("Description"); ?></th>
+            <th><?php echo $this->translate("Parent Category"); ?></th>
+            <th><?php echo $this->translate("Thumbnail"); ?>*</th>
+            <th><?php echo $this->translate("Position"); ?>*</th>
+            <th><?php echo $this->translate("Add"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('name'));
+                echo $this->formElementErrors($fieldset->get('name'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formTextarea($fieldset->get('description'));
+                echo $this->formElementErrors($fieldset->get('description'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formSelect($fieldset->get('parentCategory'));
+                echo $this->formElementErrors($fieldset->get('parentCategory'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formFile($fieldset->get('thumbnail'));
+                echo $this->formElementErrors($fieldset->get('thumbnail'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->formInput($fieldset->get('position'));
+                echo $this->formElementErrors($fieldset->get('position'), array('class' => 'formError'));
+                ?>
+            </td>
+            <td>
+                <?php echo $this->formSubmit($form->get('submit')->setValue($this->translate('Add'))); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <?php echo $this->form()->closeTag() ?>
+</div>
+<div class="tableWrapper">
+    <table id="categories" class="editableTable target-category">
+        <?php
+        for ($i = 0; $i < 5; $i++)
+            echo '<colgroup></colgroup>';
+        ?>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th><?php echo $this->translate("Name"); ?></th>
+            <th><?php echo $this->translate("Description"); ?></th>
+            <th><?php echo $this->translate("Parent Category"); ?></th>
+            <th><?php echo $this->translate("Thumbnail"); ?></th>
+            <th><?php echo $this->translate("Position"); ?></th>
+            <th><?php echo $this->translate("Delete"); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        /**
+         * @var \Product\Entity\Category $category
+         */
+        foreach ($this->categories as $category):
+            $thumbnail = $category->getThumbnail();
+            $parentCategory = $category->getParentCategory();
+            ?>
+            <tr>
+                <td class="categoryCategoryId"><?php echo $category->getCategoryId(); ?></td>
+                <td class="categoryName editText required"><?php echo $category->getName(); ?></td>
+                <td class="categoryDescription editTextfield">
+                    <textarea class="invisible"><?php echo $category->getDescription(); ?></textarea></td>
+                <td class="categoryParentCategory editSelect"><?php echo $parentCategory ? $parentCategory->getName() : ' - '; ?></td>
+                <td class="categoryThumbnail editImage">
+                    <span class="fileMeta invisible">images/categories/<?php echo uniqid("category_").rand(1000000,9999999); ?>.jpg</span>
+                    <span
+                        class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/categories/' . $thumbnail) . '" alt="' . $this->translate("category image") . '" />' : ' - '; ?></span>
+                </td>
+                <td class="categoryPosition editText required"><?php echo $category->getPosition(); ?></td>
+                <td class="delete unEditable">X</td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div id="editPanel">
+    <textarea class="editInput"></textarea>
+    <span id="editDone"><?php echo $this->translate("Done"); ?></span>
+</div>
