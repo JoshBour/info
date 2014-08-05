@@ -9,23 +9,19 @@
     echo $this->headTitle($pageTitle);
 
     // The meta tags
-    $description = isset($child->metaInfo['description']) ? $child->metaInfo['description'] : 'The scheduler description.';
-    $keywords = isset($child->metaInfo['keywords']) ? $child->metaInfo['keywords'] : 'the, scheduler, tags';
+    $description = isset($child->metaInfo['description']) ? $child->metaInfo['description'] : 'Info is a company that specializes in lighting technology and equipment';
+    $keywords = isset($child->metaInfo['keywords']) ? $child->metaInfo['keywords'] : 'info, lighting, products, equipment, led, lamp';
 
     // We append everything to the headMeta
     $this->headMeta()
         ->setCharset('UTF-8')
         ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-        ->appendHttpEquiv('cache-control', 'max-age=0')
-        ->appendHttpEquiv('cache-control', 'no-cache')
-        ->appendHttpEquiv('expires', '0')
-        ->appendHttpEquiv('expires', 'Tue, 01 Jan 1980 1:00:00 GMT')
-        ->appendHttpEquiv('pragma', 'no-cache')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
         ->appendName('description', $description)
         ->appendName('keywords', $keywords)
-        ->appendName('robots', "noindex, nofollow")
+        ->appendName('robots', $follow)
         ->appendName('language', 'en')
-        ->appendName('googlebot', "noindex, nofollow");
+        ->appendName('googlebot', $follow);
     echo $this->headMeta();
 
     // We add the favicon and our stylesheets

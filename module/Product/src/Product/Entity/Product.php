@@ -62,11 +62,7 @@ class Product {
     private $specifications;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product", inversedBy="relatedToProducts")
-     * @ORM\JoinTable(name="related_products",
-     *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="product_id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="related_product_id", referencedColumnName="product_id")}
-     *      )
+     * @ORM\OneToMany(targetEntity="RelatedProduct", mappedBy="product")
      */
     private $relatedProducts;
 
@@ -77,21 +73,17 @@ class Product {
     private $category;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product", mappedBy="relatedProducts")
+     * @ORM\OneToMany(targetEntity="RelatedProduct", mappedBy="relatedProduct")
      */
     private $relatedToProducts;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product", inversedBy="variationToProducts")
-     * @ORM\JoinTable(name="products_variations",
-     *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="product_id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="product_variation_id", referencedColumnName="product_id")}
-     *      )
+     * @ORM\OneToMany(targetEntity="ProductVariation", mappedBy="product")
      */
     private $productVariations;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product", mappedBy="productVariations")
+     * @ORM\OneToMany(targetEntity="ProductVariation", mappedBy="variation")
      */
     private $variationToProducts;
 
@@ -242,6 +234,10 @@ class Product {
         }
     }
 
+    public function clearProductVariations(){
+        $this->getProductVariations()->clear();
+    }
+
     /**
      * @param mixed $productVariations
      */
@@ -273,6 +269,10 @@ class Product {
         }else{
             $this->relatedProducts->add($relatedProducts);
         }
+    }
+
+    public function clearRelatedProducts(){
+        $this->getRelatedProducts()->clear();
     }
 
     /**

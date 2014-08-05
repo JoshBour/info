@@ -64,7 +64,7 @@ class IndexController extends BaseController
 
                 {$data['contact']['body']}
                 ";
-                $message->addTo($email)
+                $message->addTo('info@infolightingco.com')
                     ->addFrom($data['contact']['sender'])
                     ->setSubject($data['contact']['subject'])
                     ->addReplyTo($data['contact']['sender'])
@@ -73,13 +73,14 @@ class IndexController extends BaseController
 
                 $transport = new SmtpTransport();
                 $options = new SmtpOptions(array(
-                    'host' => 'smtp.gmail.com',
-                    'port' => '587',
+                    'name' => 'infolightingco.com',
+                    'host' => 'mail.infolightingco.com',
+                    'port' => '25',
                     'connection_class' => 'login',
                     'connection_config' => array(
-                        'ssl' => 'tls',
-                        'username' => $email, //info@infolightingco.com
-                        'password' => $password, //7jhuP%KP
+                       // 'ssl' => 'tls',
+                        'username' => 'info@infolightingco.com', //info@infolightingco.com
+                        'password' => '7jhuP%KP', //7jhuP%KP
                     )
                 ));
                 $transport->setOptions($options);

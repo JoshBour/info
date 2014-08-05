@@ -63,7 +63,8 @@ $price = $product->getPrice();
             <h2>Related Products</h2>
             <ul class="module">
                 <?php foreach ($relatedProducts as $relatedProduct)
-                    echo $this->partial('product', array("product" => $relatedProduct, "includeName" => true, "category" => $category));
+                    $related = $relatedProduct->getRelatedProduct();
+                    echo $this->partial('product', array("product" => $related, "includeName" => true, "category" => $category));
                 ?>
             </ul>
         </div>
@@ -88,12 +89,12 @@ $price = $product->getPrice();
         <?php
         $productVariations = $product->getProductVariations()->toArray();
         if(count($productVariations) <= 0)
-        array_unshift($productVariations,$product);
-//        $productVariations[] = $product;
-//        uasort($productVariations,function($a, $b){
-//           return $a->getProductNumber() > $b->getProductNumber();
-//        });
-        foreach ($productVariations as $variation):
+        array_unshift($productVariations,new \Product\Entity\ProductVariation(null,$product,1));
+        uasort($productVariations,function($a, $b){
+           return $a->getPosition() > $b->getPosition();
+        });
+        foreach ($productVariations as $join):
+            $variation = $join->getVariation();
             ?>
             <tr>
                 <td><?php echo $variation->getProductNumber(); ?></td>

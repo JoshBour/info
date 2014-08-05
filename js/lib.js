@@ -62,7 +62,7 @@ function setEditableTextfields() {
             area.hide();
             $('<span />', {
                 "class": "textEditorToggle",
-                "html": "Click to edit"
+                "html": "Edit"
             }).appendTo(area.closest('td'));
         }
     });

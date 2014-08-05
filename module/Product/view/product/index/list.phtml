@@ -11,7 +11,7 @@
     $fieldset = $form->get('product');
     $form->setAttribute('action', $this->url('products/add'));
     echo $this->form()->openTag($form);
-//    echo $this->formHidden($form->get('security'));
+    //    echo $this->formHidden($form->get('security'));
     ?>
     <table>
         <thead>
@@ -50,9 +50,15 @@
                 ?>
             </td>
             <td>
-                <ul class="attributes invisible">
+                <div class="attributeGuide invisible">
+                    <span class="attributeId invisible exclude">Id</span>
+                    <span class="name">Name</span>
+                    <span class="value">Value</span>
+                    <span class="position">Position</span>
+                </div>
+                <ul class="attributes invisible dynamicList">
                 </ul>
-                <span class="editAttributes">Click to edit</span>
+                <span class="editAttributes editButton">Edit</span>
             </td>
             <td>
                 <?php
@@ -73,16 +79,22 @@
                 ?>
             </td>
             <td>
-                <?php
-                echo $this->formSelect($fieldset->get('relatedProducts'));
-                echo $this->formElementErrors($fieldset->get('relatedProducts'), array('class' => 'formError'));
-                ?>
+                <div class="attributeGuide invisible">
+                    <span class="productNumber">Product Number</span>
+                    <span class="position">Position</span>
+                </div>
+                <ul class="relatedProducts invisible dynamicList">
+                </ul>
+                <span class="editAttributes editButton">Edit</span>
             </td>
             <td>
-                <?php
-                echo $this->formSelect($fieldset->get('productVariations'));
-                echo $this->formElementErrors($fieldset->get('productVariations'), array('class' => 'formError'));
-                ?>
+                <div class="attributeGuide invisible">
+                    <span class="productNumber">Product Number</span>
+                    <span class="position">Position</span>
+                </div>
+                <ul class="productVariations invisible dynamicList">
+                </ul>
+                <span class="editAttributes editButton">Edit</span>
             </td>
             <td>
                 <?php
@@ -137,61 +149,80 @@
                 <td class="productProductId"><?php echo $product->getProductId(); ?></td>
                 <td class="productProductNumber editText required"><?php echo $product->getProductNumber(); ?></td>
                 <td class="productName editText notEmpty"><?php echo $product->getName(); ?></td>
-                <td class="productDescription editTextfield required"><textarea class="invisible"><?php echo $product->getDescription(); ?></textarea></td>
+                <td class="productDescription editTextfield required"><textarea
+                        class="invisible"><?php echo $product->getDescription(); ?></textarea></td>
                 <td class="productAttributes editList">
+                    <div class="attributeGuide invisible">
+                        <span class="attributeId invisible">Id</span>
+                        <span class="name">Name</span>
+                        <span class="value">Value</span>
+                        <span class="position">Position</span>
+                    </div>
                     <ul class="attributes invisible">
-                        <?php foreach($product->getAttributes() as $joinAttribute):
+                        <?php foreach ($product->getAttributes() as $joinAttribute):
                             $attribute = $joinAttribute->getAttribute();
                             ?>
-                        <li>
-                            <span class="attributeId"><?php echo $attribute->getAttributeId(); ?></span>
-                            <span class="attributeName"><?php echo $attribute->getName(); ?></span>
-                            <span class="attributeValue"><?php echo $joinAttribute->getValue(); ?></span>
-                            <span class="attributePosition"><?php echo $joinAttribute->getPosition(); ?></span>
-                        </li>
+                            <li>
+                                <span class="attributeId invisible exclude"><?php echo $attribute->getAttributeId(); ?></span>
+                                <span class="name"><?php echo $attribute->getName(); ?></span>
+                                <span class="value"><?php echo $joinAttribute->getValue(); ?></span>
+                                <span class="position"><?php echo $joinAttribute->getPosition(); ?></span>
+                            </li>
                         <?php endforeach; ?>
                     </ul>
-                    <span class="editAttributes">Click to edit</span>
+                    <span class="editAttributes editButton">Edit</span>
                 </td>
                 <td class="productDatasheet editFile">
                     <span class="fileMeta invisible">data/datasheets/<?php echo uniqid('datasheet_'); ?>.pdf</span>
                     <span class="fileName"><?php echo $datasheet ? $datasheet : ' - '; ?></span>
                 </td>
                 <td class="productThumbnail editImage">
-                    <span class="fileMeta invisible">images/products/<?php echo uniqid("product_").rand(1000000,9999999); ?>.jpg</span>
-                    <span class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/products/' . $thumbnail) . '" alt="' . $this->translate("product image") . '" />' : ' - '; ?></span>
+                    <span
+                        class="fileMeta invisible">images/products/<?php echo uniqid("product_") . rand(1000000, 9999999); ?>
+                        .jpg</span>
+                    <span
+                        class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/products/' . $thumbnail) . '" alt="' . $this->translate("product image") . '" />' : ' - '; ?></span>
                 </td>
                 <td class="productSpecifications editImage">
-                    <span class="fileMeta invisible">images/products/<?php echo uniqid("specifications_").rand(1000000,9999999); ?>.jpg</span>
-                    <span class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/products/' . $specifications) . '" alt="' . $this->translate("specifications image") . '" />' : ' - '; ?></span>
+                    <span
+                        class="fileMeta invisible">images/products/<?php echo uniqid("specifications_") . rand(1000000, 9999999); ?>
+                        .jpg</span>
+                    <span
+                        class="fileImage"><?php echo $thumbnail ? '<img src="' . $this->basePath('images/products/' . $specifications) . '" alt="' . $this->translate("specifications image") . '" />' : ' - '; ?></span>
                 </td>
-                <td class="productRelatedProducts editMultiSelect excludeCurrent">
-                    <?php
-                    if ($relatedProducts->count() > 0):
-                        foreach ($relatedProducts as $relatedProduct):
+                <td class="productRelatedProducts editList">
+                    <div class="attributeGuide invisible">
+                        <span class="productNumber">Product Number</span>
+                        <span class="position">Position</span>
+                    </div>
+                    <ul class="attributes invisible">
+                        <?php foreach ($product->getRelatedProducts() as $joinAttribute):
+                            $related = $joinAttribute->getRelatedProduct();
                             ?>
-                            <span
-                                class="option-<?php echo $relatedProduct->getProductId(); ?>"><?php echo $relatedProduct->getProductNumber(); ?></span>
-
-                        <?php
-                        endforeach;
-                    else:
-                        echo ' - ';
-                    endif;?>
+                            <li>
+                                <span class="productNumber"><?php echo $related->getProductNumber(); ?></span>
+                                <span class="position"><?php echo $joinAttribute->getPosition(); ?></span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <span class="editAttributes editButton">Edit</span>
                 </td>
-                <td class="productProductVariations editMultiSelect excludeCurrent">
-                    <?php
-                    if ($productVariations->count() > 0):
-                        foreach ($productVariations as $productVariation):
+                <td class="productProductVariations editList">
+                    <div class="attributeGuide invisible">
+                        <span class="productNumber">Product Number</span>
+                        <span class="position">Position</span>
+                    </div>
+                    <ul class="attributes invisible">
+                        <?php foreach ($product->getProductVariations() as $joinAttribute):
+                            $variation = $joinAttribute->getVariation();
                             ?>
-                            <span
-                                class="option-<?php echo $productVariation->getProductId(); ?>"><?php echo $productVariation->getProductNumber(); ?></span>
-
-                        <?php
-                        endforeach;
-                    else:
-                        echo ' - ';
-                    endif;?>
+                            <li>
+                                <span class="productNumber"><?php echo $variation->getProductNumber(); ?></span>
+                                <span class="position"><?php echo $joinAttribute->getPosition(); ?></span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <span class="editAttributes editButton">Edit</span>
                 </td>
                 <td class="productCategory editSelect"><?php echo $category ? $category->getName() : ' - '; ?></td>
                 <td class="delete unEditable">X</td>
