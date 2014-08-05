@@ -45,8 +45,15 @@ echo $this->form()->openTag($form);
             ?>
         </td>
         <td>
-            <ul class="attributes invisible"></ul>
-            <span class="editAttributes">Click to edit</span>
+            <div class="attributeGuide invisible">
+                <span class="attributeId invisible exclude">Id</span>
+                <span class="name">Name</span>
+                <span class="value">Value</span>
+                <span class="position">Position</span>
+            </div>
+            <ul class="attributes invisible dynamicList">
+            </ul>
+            <span class="editAttributes editButton">Edit</span>
         </td>
         <td>
             <?php
@@ -67,16 +74,22 @@ echo $this->form()->openTag($form);
             ?>
         </td>
         <td>
-            <?php
-            echo $this->formSelect($fieldset->get('relatedProducts'));
-            echo $this->formElementErrors($fieldset->get('relatedProducts'), array('class' => 'formError'));
-            ?>
+            <div class="attributeGuide invisible">
+                <span class="productNumber">Product Number</span>
+                <span class="position">Position</span>
+            </div>
+            <ul class="relatedProducts invisible dynamicList">
+            </ul>
+            <span class="editAttributes editButton">Edit</span>
         </td>
         <td>
-            <?php
-            echo $this->formSelect($fieldset->get('productVariations'));
-            echo $this->formElementErrors($fieldset->get('productVariations'), array('class' => 'formError'));
-            ?>
+            <div class="attributeGuide invisible">
+                <span class="productNumber">Product Number</span>
+                <span class="position">Position</span>
+            </div>
+            <ul class="productVariations invisible dynamicList">
+            </ul>
+            <span class="editAttributes editButton">Edit</span>
         </td>
         <td>
             <?php
